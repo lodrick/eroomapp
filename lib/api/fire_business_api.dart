@@ -3,7 +3,7 @@ import 'package:eRoomApp/models/advert.dart';
 import 'package:eRoomApp/models/advert_image.dart';
 import 'package:eRoomApp/utils.dart';
 
-class FireBusinessApi {
+/*class FireBusinessApi {
   static Stream<List<Advert>> getAdverts() => FirebaseFirestore.instance
       .collection('adverts')
       .orderBy(AdvertField.updatedAt, descending: true)
@@ -102,4 +102,4 @@ class FireBusinessApi {
           .where('advertId', isEqualTo: advertId)
           .snapshots()
           .transform(Utils.transformer(AdvertImage.fromJson));
-}
+}*/

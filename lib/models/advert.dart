@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eRoomApp/models/advert_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class AdvertField {
@@ -52,23 +51,26 @@ class Advert {
     this.updatedAt,
     this.liked,
     this.status,
+    this.advertImages,
   });
 
-  Advert copyWith({
-    String id,
-    String roomType,
-    double price,
-    String title,
-    String decription,
-    String province,
-    String city,
-    String suburb,
-    String userId,
-    String createdAt,
-    String updatedAt,
-    String status,
-    List<String> uriImages,
-  }) =>
+  Advert copyWith(
+          {String id,
+          String roomType,
+          double price,
+          String title,
+          String decription,
+          String province,
+          String city,
+          String suburb,
+          String userId,
+          String createdAt,
+          String updatedAt,
+          String status,
+          List<AdvertImage> advertImages
+          //List<String> uriImages,
+
+          }) =>
       Advert(
         id: id ?? this.id,
         roomType: roomType ?? this.roomType,
@@ -82,25 +84,27 @@ class Advert {
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
         status: status ?? this.status,
+        advertImages: advertImages ?? this.advertImages,
         //uriImages: uriImages ?? this.uriImages,
       );
 
-  // factory Advert.fromJson(Map<String, dynamic> json) => Advert(
-  //       id: json['id'] as String,
-  //       roomType: json['room_type'] as String,
-  //       price: json['price'] as double,
-  //       title: json['title'] as String,
-  //       decription: json['description'] as String,
-  //       city: json['city'] as String,
-  //       suburb: json['suburb'] as String,
-  //       userId: json['user_id'] as String,
-  //       createdAt: json['created_at'] as String,
-  //       updatedAt: json['updated_at'] as String,
-  //       status: json['status'] as String,
-  //       images: json['images'] as List<Asset>,
-  //       //for(AdvertImage advertImage in advertImages ){}
-  //     );
-  static Advert fromJson(Map<String, dynamic> json) => Advert(
+  factory Advert.fromJson(Map<String, dynamic> json) => Advert(
+        id: json['id'] as String,
+        roomType: json['room_type'] as String,
+        price: json['price'] as double,
+        title: json['title'] as String,
+        decription: json['description'] as String,
+        city: json['city'] as String,
+        suburb: json['suburb'] as String,
+        userId: json['user_id'] as String,
+        createdAt: json['created_at'] as String,
+        updatedAt: json['updated_at'] as String,
+        status: json['status'] as String,
+        //images: json['images'] as List<Asset>,
+        //for(AdvertImage advertImage in advertImages ){}
+      );
+
+  /*static Advert fromJson(Map<String, dynamic> json) => Advert(
         id: json['id'],
         roomType: json['roomType'],
         price: json['price'],
@@ -113,7 +117,7 @@ class Advert {
         updatedAt: json['updatedAt'],
         liked: json['liked'],
         status: json['status'],
-      );
+      );*/
 
   // fromJS({Map<String, dynamic> json, List<AdvertImage> advertImagess}) {
   //   id = json['id'];

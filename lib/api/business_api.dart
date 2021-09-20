@@ -146,6 +146,49 @@ class BusinessApi {
     yield adverts;
   }
 
+  static Stream<List<Advert>> finddverts(
+      {minValue, maxValue, suburb, city, authToken}) async* {
+    List<Advert> adverts = new List<Advert>();
+    List<AdvertImage> advertsTpUrl = new List<AdvertImage>();
+    var response = await http.get(
+        Uri.encodeFull(url +
+            'adverts?min_value=' +
+            minValue +
+            '&max_value=' +
+            maxValue +
+            '&suburb=' +
+            suburb +
+            '&city=' +
+            city),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': authToken,
+        });
+    var extractData = jsonDecode(response.body);
+    var tempAdverts = extractData[1]['adverts'] as List;
+    var tempImages = extractData[0]['images'] as List;
+
+    List<Advert> advertsTp =
+        tempAdverts.map((advert) => Advert.fromJson(advert)).toList();
+
+    List<AdvertImage> advertImages = tempImages
+        .map((advertImage) => AdvertImage.fromJson(advertImage))
+        .toList();
+
+    for (Advert advert in advertsTp) {
+      for (AdvertImage advertImage in advertImages) {
+        if (advert.id == advertImage.advertId) {
+          advertsTpUrl.add(advertImage);
+        }
+      }
+      advert.advertImages = advertsTpUrl;
+      adverts.add(advert);
+      advertsTpUrl = new List<AdvertImage>();
+    }
+
+    yield adverts;
+  }
+
   static Future<int> updateAdvert(
       Advert advert, String advertId, String authToken) async {
     Uri url = Uri.parse(
@@ -209,6 +252,8 @@ class BusinessApi {
     imageUploadRequest.fields['province'] = advert.province;
     imageUploadRequest.fields['city'] = advert.city;
     imageUploadRequest.fields['suburb'] = advert.suburb;
+    //imageUploadRequest.fields['created_at'] = advert.createdAt;
+    //imageUploadRequest.fields['updated_at'] = advert.updatedAt;
 
     try {
       final streamedResponse = await imageUploadRequest.send();

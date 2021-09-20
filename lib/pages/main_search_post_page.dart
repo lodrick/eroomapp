@@ -8,6 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:eRoomApp/theme.dart';
 
 class MainSearchPostPage extends StatefulWidget {
+  final String authToken;
+  final String contactNumber;
+  MainSearchPostPage(
+      {@required this.authToken, @required this.contactNumber, Key key})
+      : super(key: key);
   @override
   _MainSearchPostPageState createState() => _MainSearchPostPageState();
 }
@@ -247,6 +252,8 @@ class _MainSearchPostPageState extends State<MainSearchPostPage> {
                 maxPrice: double.parse(maxPriceControler.text.toString()),
                 suburb: suburbController.text,
                 city: _city,
+                authToken: widget.authToken,
+                contactNumber: widget.contactNumber,
               ),
             ),
           );

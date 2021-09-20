@@ -1,4 +1,5 @@
-import 'package:eRoomApp/api/fire_business_api.dart';
+import 'package:eRoomApp/api/business_api.dart';
+//import 'package:eRoomApp/api/fire_business_api.dart';
 import 'package:eRoomApp/models/advert.dart';
 import 'package:eRoomApp/theme.dart';
 import 'package:eRoomApp/widgets/post_card_widget.dart';
@@ -9,12 +10,16 @@ class PostSearchResultsDisplay extends StatelessWidget {
   final double maxPrice;
   final String suburb;
   final String city;
+  final String authToken;
+  final String contactNumber;
 
   PostSearchResultsDisplay({
     @required this.minPrice,
     @required this.maxPrice,
     @required this.suburb,
     @required this.city,
+    @required this.authToken,
+    @required this.contactNumber,
     Key key,
   }) : super(key: key);
 
@@ -51,8 +56,13 @@ class PostSearchResultsDisplay extends StatelessWidget {
                   height: MediaQuery.of(context).size.height,
                   child: Container(
                     child: StreamBuilder<List<Advert>>(
-                      stream: FireBusinessApi.getSearchResultAdvert(
-                          minPrice, maxPrice, suburb, city),
+                      //stream: FireBusinessApi.getSearchResultAdvert(minPrice, maxPrice, suburb, city),
+                      stream: BusinessApi.finddverts(
+                          minValue: minPrice,
+                          maxValue: maxPrice,
+                          suburb: suburb,
+                          city: city,
+                          authToken: authToken),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
@@ -72,8 +82,8 @@ class PostSearchResultsDisplay extends StatelessWidget {
                               } else {
                                 return PostCardWidget(
                                   adverts: adverts,
-                                  //contactNumber: widget.contactNumber,
-                                  //authToken: widget.authToken,
+                                  contactNumber: contactNumber,
+                                  authToken: authToken,
                                 );
                               }
                             }

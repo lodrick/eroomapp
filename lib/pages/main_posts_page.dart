@@ -27,6 +27,8 @@ class MainPostsPage extends StatefulWidget {
   final String idUser;
   final String email;
   final String contactNumber;
+  final String authToken;
+  final String id;
 
   const MainPostsPage({
     this.firstName,
@@ -34,6 +36,8 @@ class MainPostsPage extends StatefulWidget {
     this.email,
     this.idUser,
     this.contactNumber,
+    this.authToken,
+    this.id,
     Key key,
   }) : super(key: key);
   @override
@@ -58,6 +62,7 @@ class _MainPostsPageState extends State<MainPostsPage> {
 
   @override
   void initState() {
+    print(widget.authToken);
     super.initState();
   }
 
@@ -68,7 +73,7 @@ class _MainPostsPageState extends State<MainPostsPage> {
 
     List<Widget> _widgetOptions = <Widget>[
       PostCards(
-        //authToken: widget.authToken,
+        authToken: widget.authToken,
         contactNumber: widget.contactNumber,
       ),
       CreatePost(
@@ -77,8 +82,13 @@ class _MainPostsPageState extends State<MainPostsPage> {
         contactNumber: widget.contactNumber,
         email: widget.email,
         idUser: widget.idUser,
+        authToken: widget.authToken,
+        id: widget.id,
       ),
-      MainSearchPostPage(),
+      MainSearchPostPage(
+        authToken: widget.authToken,
+        contactNumber: widget.contactNumber,
+      ),
     ];
 
     return Consumer<LoginStore>(
@@ -124,8 +134,9 @@ class _MainPostsPageState extends State<MainPostsPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => MainSearchPostPage(
-                              //authToken: widget.authToken,
-                              ),
+                            authToken: widget.authToken,
+                            contactNumber: widget.contactNumber,
+                          ),
                         ),
                       ),
                       child: Icon(Icons.search, size: 25.0),
@@ -271,9 +282,9 @@ class _MainPostsPageState extends State<MainPostsPage> {
                                         textSize: 16.0,
                                         height: (menuContainerHeight) / 8,
                                         widget: Inbox(
-                                            //authToken: widget.authToken,
-                                            //id: widget.id,
-                                            ),
+                                          //authToken: widget.authToken,
+                                          id: widget.id,
+                                        ),
                                       ),
                                       MyButton(
                                         text: 'My Post',
@@ -281,12 +292,12 @@ class _MainPostsPageState extends State<MainPostsPage> {
                                         textSize: 16.0,
                                         height: (menuContainerHeight) / 8,
                                         widget: PostsListApartments(
-                                          //authToken: widget.authToken,
+                                          authToken: widget.authToken,
                                           contactNumber: widget.contactNumber,
                                           email: widget.email,
                                           firstName: widget.firstName,
                                           lastName: widget.lastName,
-                                          //id: widget.id,
+                                          id: widget.id,
                                         ),
                                       ),
                                       MyButton(
@@ -305,12 +316,13 @@ class _MainPostsPageState extends State<MainPostsPage> {
                                         textSize: 16.0,
                                         height: (menuContainerHeight) / 8,
                                         widget: Favourites(
-                                          //authToken: widget.authToken,
+                                          authToken: widget.authToken,
                                           idUser: widget.idUser,
                                           contactNumber: widget.contactNumber,
                                           email: widget.email,
                                           firstName: widget.firstName,
                                           lastName: widget.lastName,
+                                          id: widget.id,
                                         ),
                                       ),
                                       MyButton(

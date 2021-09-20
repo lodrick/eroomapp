@@ -1,3 +1,4 @@
+import 'package:eRoomApp/api/business_api.dart';
 import 'package:eRoomApp/api/fire_business_api.dart';
 import 'package:eRoomApp/models/advert.dart';
 import 'package:eRoomApp/pages/main_posts_page.dart';
@@ -9,21 +10,23 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class PostAdEdit extends StatefulWidget {
   final Advert advert;
-  //final String authToken;
+  final String authToken;
   final String firstName;
   final String lastName;
   final String idUser;
   final String email;
   final String contactNumber;
+  final String id;
 
   PostAdEdit({
     @required this.advert,
-    //@required this.authToken,
+    @required this.authToken,
     @required this.firstName,
     @required this.lastName,
     @required this.idUser,
     @required this.email,
     @required this.contactNumber,
+    @required this.id,
   });
   @override
   _PostAdEditState createState() => _PostAdEditState();
@@ -341,7 +344,7 @@ class _PostAdEditState extends State<PostAdEdit> {
             status: 'pending',
           );
 
-          FireBusinessApi.updateAdvert(advert, widget.advert.id).then((resut) {
+          /*FireBusinessApi.updateAdvert(advert, widget.advert.id).then((resut) {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                   builder: (context) => MainPostsPage(
@@ -357,9 +360,9 @@ class _PostAdEditState extends State<PostAdEdit> {
           }).catchError((e) => Fluttertoast.showToast(
               msg: 'Unable to update the post.',
               backgroundColor: MyColors.primaryColor,
-              textColor: Colors.white));
+              textColor: Colors.white));*/
 
-          /*BusinessApi.updateAdvert(advert, widget.advert.id, widget.authToken)
+          BusinessApi.updateAdvert(advert, widget.advert.id, widget.authToken)
               .then((result) {
             if (result == 200) {
               Navigator.of(context).pushAndRemoveUntil(
@@ -382,7 +385,7 @@ class _PostAdEditState extends State<PostAdEdit> {
             }
           }).catchError((error) {
             print(error.toString());
-          });*/
+          });
           dispose();
         },
         child: Icon(

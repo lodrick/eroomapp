@@ -406,7 +406,7 @@ class _CreatePostPart2State extends State<CreatePostPart2> {
           //   ),
           // );
           print("using firebase");
-          FireBusinessApi.addAdvert(widget.advert);
+          //FireBusinessApi.addAdvert(widget.advert);
         },
         child: Icon(
           Icons.check,

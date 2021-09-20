@@ -9,9 +9,13 @@ import 'package:intl/intl.dart';
 class PostCardWidget extends StatefulWidget {
   final List<Advert> adverts;
   final String contactNumber;
+  final String authToken;
 
   const PostCardWidget(
-      {@required this.adverts, @required this.contactNumber, Key key})
+      {@required this.adverts,
+      @required this.contactNumber,
+      @required this.authToken,
+      Key key})
       : super(key: key);
 
   @override
@@ -35,24 +39,29 @@ class _PostCardWidgetState extends State<PostCardWidget> {
         itemCount: widget.adverts.length,
         itemBuilder: (context, index) {
           Advert advert = widget.adverts[index];
+          //String updatedAt = advert.updatedAt;
+          //print(advert.createdAt);
           //DateTime updatedAt = DateTime.parse(advert.updatedAt);
+
           //DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(
           //   advert.updatedAt); //from firebase
-          print(
-              DateTime.parse(advert.updatedAt.toDate().toString()).toString());
+          //print(
+          //    DateTime.parse(advert.updatedAt.toDate().toString()).toString());
 
-          String updatedAt = DateFormat('dd-MM-yyy')
-              .format(DateTime.parse(advert.updatedAt.toDate().toString()));
+          String updatedAt = DateFormat('yyy-MM-dd')
+              .format(DateTime.parse(advert.updatedAt.toString()));
+
           bool isAdvertLiked = false;
           _imageUrls = new List<String>();
 
-          // for (int x = 0; x < advert.advertImages.length; x++) {
-          //   if (advert.advertImages[x].imageUrl.isNotEmpty) {
-          //     imageUrl = advert.advertImages[x].imageUrl;
-          //   } else {
-          //     imageUrl = '';
-          //   }
-          // }
+          for (int x = 0; x < advert.advertImages.length; x++) {
+            if (advert.advertImages[x].imageUrl.isNotEmpty) {
+              imageUrl = advert.advertImages[x].imageUrl;
+              print(imageUrl);
+            } else {
+              imageUrl = '';
+            }
+          }
 
           // FirebaseApi.getLikeObj(adId: advert.id, currentUserId: advert.userId)
           //     .then((result) {
@@ -63,13 +72,14 @@ class _PostCardWidgetState extends State<PostCardWidget> {
           //   }
           // });
 
-          print(isAdvertLiked);
+          //print(isAdvertLiked);
 
           return GestureDetector(
             onTap: () {
-              // for (int x = 0; x < advert.advertImages.length; x++) {
-              //   _imageUrls.add(advert.advertImages[x].imageUrl);
-              // }
+              for (int x = 0; x < advert.advertImages.length; x++) {
+                _imageUrls.add(advert.advertImages[x].imageUrl);
+                print(advert.advertImages[x].imageUrl);
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -83,9 +93,9 @@ class _PostCardWidgetState extends State<PostCardWidget> {
                     price: advert.price.toString(),
                     status: advert.status,
                     userId: advert.userId,
-                    updatedAt: updatedAt,
-                    //authToken: widget.authToken,
-                    //contactNumber: widget.contactNumber,
+                    updatedAt: updatedAt.toString(),
+                    authToken: widget.authToken,
+                    contactNumber: widget.contactNumber,
                     imageUrls: _imageUrls,
                   ),
                 ),
@@ -154,7 +164,7 @@ class _PostCardWidgetState extends State<PostCardWidget> {
                                 Icons.lock_clock,
                                 color: Colors.blueGrey,
                               ),
-                              Text(updatedAt)
+                              Text(updatedAt.toString())
                             ],
                           ),
                           Padding(

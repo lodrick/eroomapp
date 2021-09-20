@@ -1,3 +1,4 @@
+import 'package:eRoomApp/api/business_api.dart';
 import 'package:eRoomApp/api/fire_business_api.dart';
 import 'package:eRoomApp/models/advert.dart';
 import 'package:eRoomApp/theme.dart';
@@ -43,8 +44,37 @@ class _PostCardsState extends State<PostCards> {
               topRight: Radius.circular(20.0),
             ),
           ),
+          // child: StreamBuilder<List<Advert>>(
+          //   stream: FireBusinessApi.getAdverts(),
+          //   builder: (context, snapshot) {
+          //     switch (snapshot.connectionState) {
+          //       case ConnectionState.waiting:
+          //         return Center(child: CircularProgressIndicator());
+          //       default:
+          //         if (snapshot.hasError) {
+          //           print(snapshot.error);
+          //           return buildText('Something Went Wrong Try again later, ' +
+          //               snapshot.error.toString());
+          //         } else {
+          //           var adverts = snapshot.data;
+          //           print(adverts.elementAt(0).city);
+
+          //           if (adverts == null || adverts.isEmpty) {
+          //             return buildText('No Advert Found');
+          //           } else {
+          //             return PostCardWidget(
+          //               adverts: adverts,
+          //               //contactNumber: widget.contactNumber,
+          //               //authToken: widget.authToken,
+          //             );
+          //           }
+          //         }
+          //     }
+          //   },
+          // ),
+
           child: StreamBuilder<List<Advert>>(
-            stream: FireBusinessApi.getAdverts(),
+            stream: BusinessApi.requestAdverts(widget.authToken),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
@@ -63,8 +93,8 @@ class _PostCardsState extends State<PostCards> {
                     } else {
                       return PostCardWidget(
                         adverts: adverts,
-                        //contactNumber: widget.contactNumber,
-                        //authToken: widget.authToken,
+                        contactNumber: widget.contactNumber,
+                        authToken: widget.authToken,
                       );
                     }
                   }

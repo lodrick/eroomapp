@@ -1,3 +1,4 @@
+import 'package:eRoomApp/api/business_api.dart';
 import 'package:eRoomApp/api/firebase_api.dart';
 import 'package:eRoomApp/pages/main_posts_page.dart';
 import 'package:eRoomApp/pages/profile_page_user_detail_save.dart';
@@ -149,26 +150,29 @@ abstract class LoginStoreBase with Store {
 
     if (firebaseUser.phoneNumber != null ||
         firebaseUser.phoneNumber.isNotEmpty) {
-      FirebaseApi.retriveUser(firebaseUser.phoneNumber).then((user) {
-        if (user != null) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (_) => MainPostsPage(
-                  firstName: user.name ?? '',
-                  lastName: user.surname ?? '',
-                  email: user.email ?? '',
-                  idUser: user.idUser,
-                  contactNumber: user.contactNumber,
+      BusinessApi.authenticate(firebaseUser.phoneNumber).then((result) {
+        FirebaseApi.retriveUser(firebaseUser.phoneNumber).then((user) {
+          if (user != null) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (_) => MainPostsPage(
+                    firstName: user.name ?? '',
+                    lastName: user.surname ?? '',
+                    email: user.email ?? '',
+                    idUser: user.idUser,
+                    contactNumber: user.contactNumber,
+                    authToken: result.authToken,
+                  ),
                 ),
-              ),
-              (Route<dynamic> route) => false);
-        } else {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (_) => ProfilePageUserDetailSave(),
-              ),
-              (Route<dynamic> route) => false);
-        }
+                (Route<dynamic> route) => false);
+          } else {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (_) => ProfilePageUserDetailSave(),
+                ),
+                (Route<dynamic> route) => false);
+          }
+        }).catchError((e) => print(e.toString()));
       }).catchError((e) => print(e.toString()));
     }
 

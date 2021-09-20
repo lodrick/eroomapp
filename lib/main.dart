@@ -10,7 +10,7 @@ import 'api/firebase_api.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await FirebaseApi.addRandomUsers(Users.initUsers);
+  //await FirebaseApi.addRandomUsers(Users.initUsers);
   runApp(App());
 }
 

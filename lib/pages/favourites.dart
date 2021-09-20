@@ -12,6 +12,8 @@ class Favourites extends StatefulWidget {
   final String lastName;
   final String email;
   final String contactNumber;
+  final String authToken;
+  final String id;
 
   Favourites({
     @required this.idUser,
@@ -19,6 +21,8 @@ class Favourites extends StatefulWidget {
     @required this.lastName,
     @required this.contactNumber,
     @required this.email,
+    @required this.authToken,
+    @required this.id,
     Key key,
   }) : super(key: key);
 
@@ -55,7 +59,8 @@ class _FavouritesState extends State<Favourites> {
         child: Padding(
           padding: EdgeInsets.only(left: 16.0, top: 8.0),
           child: StreamBuilder<List<Advert>>(
-            stream: FireBusinessApi.getFavouriteAdvert(widget.idUser, true),
+            stream:
+                BusinessApi.getFavouriteAdvert(widget.idUser, widget.authToken),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
@@ -84,13 +89,14 @@ class _FavouritesState extends State<Favourites> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => PostAdEdit(
-                                    //authToken: widget.authToken,
+                                    authToken: widget.authToken,
                                     advert: advert,
                                     contactNumber: widget.contactNumber,
                                     email: widget.email,
                                     firstName: widget.firstName,
                                     lastName: widget.lastName,
                                     idUser: widget.idUser,
+                                    id: widget.id,
                                   ),
                                 ),
                               ),

@@ -1,12 +1,18 @@
-import 'package:eRoomApp/api/fire_business_api.dart';
+import 'dart:io';
+
+import 'package:eRoomApp/api/business_api.dart';
 import 'package:eRoomApp/models/advert.dart';
 import 'package:eRoomApp/models/static_data.dart';
-import 'package:eRoomApp/pages/create_post_part_2.dart';
 import 'package:eRoomApp/pages/main_posts_page.dart';
 import 'package:eRoomApp/theme.dart';
 import 'package:eRoomApp/widgets/custom_textfield.dart';
+import 'package:eRoomApp/widgets/popover.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreatePost extends StatefulWidget {
@@ -15,6 +21,8 @@ class CreatePost extends StatefulWidget {
   final String idUser;
   final String email;
   final String contactNumber;
+  final String authToken;
+  final String id;
 
   CreatePost({
     @required this.firstName,
@@ -22,6 +30,8 @@ class CreatePost extends StatefulWidget {
     @required this.idUser,
     @required this.email,
     @required this.contactNumber,
+    @required this.authToken,
+    @required this.id,
     Key key,
   }) : super(key: key);
 
@@ -33,12 +43,16 @@ class _CreatePostState extends State<CreatePost> {
   String _province;
   String _roomType;
   String _city;
+  String _error = 'No Error Detected';
+  List<File> imageFiles = <File>[];
+  bool isLoading = true;
 
   TextEditingController priceController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController decriptionController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController suburbController = TextEditingController();
+  List<Asset> images = <Asset>[];
 
   String token = '';
 
@@ -325,7 +339,90 @@ class _CreatePostState extends State<CreatePost> {
                       size: 40.0,
                     ),
                     tooltip: 'Add Images',
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet<int>(
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        builder: (context) {
+                          return Popover(
+                            child: Padding(
+                              padding: EdgeInsets.zero,
+                              child: SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height / 3.8,
+                                child: ListView.builder(
+                                  physics: BouncingScrollPhysics(
+                                      parent: BouncingScrollPhysics()),
+                                  itemCount: 1,
+                                  itemBuilder: (BuildContext context, index) {
+                                    return GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        margin: EdgeInsets.all(5.0),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 0.0, vertical: 0.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5.0),
+                                          ),
+                                        ),
+                                        child: Container(
+                                            child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              'Upload Picture',
+                                              style: TextStyle(
+                                                fontSize: 24.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: _uploadImageFromCamera,
+                                              child: ListTile(
+                                                leading: Icon(
+                                                  Icons.photo_camera,
+                                                  color: MyColors.primaryColor,
+                                                ),
+                                                title: Text(
+                                                  "Take picture",
+                                                  style: TextStyle(
+                                                    color: Colors.blueGrey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Divider(
+                                              thickness: 1.0,
+                                            ),
+                                            GestureDetector(
+                                              onTap: loadAssets,
+                                              child: ListTile(
+                                                leading: Icon(
+                                                  Icons.photo_album,
+                                                  color: MyColors.primaryColor,
+                                                ),
+                                                title: Text(
+                                                  "Browse picture",
+                                                  style: TextStyle(
+                                                    color: Colors.blueGrey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ).whenComplete(() {
+                        //Navigator.of(context).pop();
+                      });
+                    },
                   )
                 ],
               ),
@@ -343,7 +440,7 @@ class _CreatePostState extends State<CreatePost> {
             var price = double.parse(priceController.text.toString());
             Advert advert = Advert(
               roomType: _roomType,
-              //prince: double.parse(priceController.text).toDouble(),
+              //price: double.parse(priceController.text).toDouble(),
               price: price,
               title: titleController.text.toString(),
               decription: decriptionController.text.toString(),
@@ -352,9 +449,33 @@ class _CreatePostState extends State<CreatePost> {
               suburb: suburbController.text.toString(),
               userId: widget.idUser,
               status: 'pending',
+              //createdAt: DateTime.now().toString(),
+              //updatedAt: DateTime.now().toString(),
             );
-            FireBusinessApi.addAdvert(advert).then((result) {
-              print(result.toString());
+
+            for (File image in imageFiles) {
+              print(image.path);
+            }
+            print("");
+            print(advert.price);
+            print(advert.province);
+            BusinessApi.uploadAdvert(imageFiles, advert, widget.authToken)
+                .then((advert) {
+              final snackBar = SnackBar(
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: Colors.black38.withOpacity(0.8),
+                content: Text(
+                  'Your Post has been added.',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(
+                      0.7,
+                    ),
+                  ),
+                ),
+              );
+              Scaffold.of(context).showSnackBar(
+                snackBar,
+              );
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -362,12 +483,30 @@ class _CreatePostState extends State<CreatePost> {
                     firstName: widget.firstName,
                     lastName: widget.lastName,
                     contactNumber: widget.contactNumber,
+                    authToken: widget.authToken,
                     email: widget.email,
-                    idUser: widget.idUser,
+                    id: widget.id,
                   ),
                 ),
               );
-            }).catchError((e) => print(e.toString));
+            }).catchError((error) => print(error.toString()));
+
+            // FireBusinessApi.addAdvert(advert).then((result) {
+            //   print(result.toString());
+
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => MainPostsPage(
+            //         firstName: widget.firstName,
+            //         lastName: widget.lastName,
+            //         contactNumber: widget.contactNumber,
+            //         email: widget.email,
+            //         idUser: widget.idUser,
+            //       ),
+            //     ),
+            //   );
+            // }).catchError((e) => print(e.toString));
 
             // Navigator.push(
             //   context,
@@ -397,5 +536,85 @@ class _CreatePostState extends State<CreatePost> {
         backgroundColor: MyColors.primaryColor,
       ),
     );
+  }
+
+  _uploadImageFromCamera() async {
+    String error = 'No Error Detected';
+    final _imagePicker = ImagePicker();
+    PickedFile image;
+    File file;
+    try {
+      //Check Permissions
+      await Permission.photos.request();
+      var permissionStatus = await Permission.photos.status;
+      if (permissionStatus.isGranted) {
+        //Select Image
+        image = await _imagePicker.getImage(source: ImageSource.camera);
+        file = File(image.path);
+        print(file.path);
+      } else {
+        print('Permission not granted. Try again with permission access');
+      }
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _error = error;
+      imageFiles.add(file);
+    });
+    print(images.length);
+  }
+
+  Future<List<File>> fileConvert(List<Asset> resultList) async {
+    List<File> files = <File>[];
+
+    //int index = 0; index < resultList.length; index++
+    for (Asset asset in resultList) {
+      final tempImageFile =
+          File("${(await getTemporaryDirectory()).path}/${asset.name}");
+      files.add(tempImageFile);
+    }
+
+    return files;
+  }
+
+  Future<void> loadAssets() async {
+    List<Asset> resultList = <Asset>[];
+    String error = 'No Error Detected';
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 4,
+        enableCamera: true,
+        selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: 'Photos'),
+        materialOptions: MaterialOptions(
+          actionBarColor: '#FF30C6D1',
+          actionBarTitle: 'eRoom App',
+          allViewTitle: 'Room Images',
+          useDetailsView: true,
+          selectCircleStrokeColor: '#000000',
+        ),
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() async {
+      _error = error;
+
+      fileConvert(resultList).then((result) {
+        setState(() {
+          imageFiles.addAll(result);
+          isLoading = false;
+        });
+      }).catchError((e) {});
+    });
   }
 }

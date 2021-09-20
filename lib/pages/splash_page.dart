@@ -36,20 +36,26 @@ class _SplashPageState extends State<SplashPage> {
   void currentUser() {
     SharedPrefs.getContactNumber().then((cNumber) {
       if (cNumber.isNotEmpty) {
-        FirebaseApi.retriveUser(cNumber).then((result) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (_) => MainPostsPage(
-                  firstName: result.name,
-                  lastName: result.surname,
-                  email: result.email,
-                  //authToken: result.authToken,
-                  contactNumber: result.contactNumber,
-                  idUser: result.idUser,
+        BusinessApi.authenticate(cNumber).then((resultToken) {
+          print(resultToken.id);
+          print(resultToken.authToken);
+          print(resultToken.lastName);
+          FirebaseApi.retriveUser(cNumber).then((result) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (_) => MainPostsPage(
+                    firstName: result.name,
+                    lastName: result.surname,
+                    email: result.email,
+                    authToken: resultToken.authToken,
+                    contactNumber: result.contactNumber,
+                    idUser: result.idUser,
+                    id: resultToken.id,
+                  ),
                 ),
-              ),
-              (Route<dynamic> route) => false);
-        }).catchError((e) => print(e.toString()));
+                (Route<dynamic> route) => false);
+          }).catchError((e) => print(e.toString()));
+        });
       }
     }).catchError((e) => print(e.toString()));
   }
