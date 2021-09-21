@@ -282,7 +282,7 @@ class _MainPostsPageState extends State<MainPostsPage> {
                                         textSize: 16.0,
                                         height: (menuContainerHeight) / 8,
                                         widget: Inbox(
-                                          //authToken: widget.authToken,
+                                          authToken: widget.authToken,
                                           id: widget.id,
                                         ),
                                       ),

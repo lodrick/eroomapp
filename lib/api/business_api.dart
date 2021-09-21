@@ -115,7 +115,6 @@ class BusinessApi {
   }
 
   static Stream<List<Advert>> requestAdverts(String authToken) async* {
-    print("creazy");
     List<Advert> adverts = new List<Advert>();
     List<AdvertImage> advertsTpUrl = new List<AdvertImage>();
     var response = await http.get(Uri.encodeFull(url + 'adverts'), headers: {
