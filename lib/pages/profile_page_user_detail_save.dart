@@ -635,7 +635,7 @@ class _ProfilePageUserDetailSaveState extends State<ProfilePageUserDetailSave> {
                                       });
                                       print('Hey this user exits');
 
-                                      /*BusinessApi.authenticate(loginStore
+                                      BusinessApi.authenticate(loginStore
                                               .firebaseUser.phoneNumber
                                               .toString())
                                           .then((res) {
@@ -655,8 +655,7 @@ class _ProfilePageUserDetailSaveState extends State<ProfilePageUserDetailSave> {
                                       }).catchError((e) {
                                         print(
                                             'Error loging in: ' + e.toString());
-                                      });*/
-
+                                      });
                                     } else {
                                       print('This user does not exit.');
                                       User user = User(
@@ -687,7 +686,7 @@ class _ProfilePageUserDetailSaveState extends State<ProfilePageUserDetailSave> {
                                         userType: 'user',
                                       );
 
-                                      FirebaseApi.addUser(user).then((result) {
+                                      /*FirebaseApi.addUser(user).then((result) {
                                         print('Res for firestore data');
                                         Navigator.push(
                                           context,
@@ -704,10 +703,10 @@ class _ProfilePageUserDetailSaveState extends State<ProfilePageUserDetailSave> {
                                         );
                                       }).catchError((e) => print(
                                           'Error adding a user from firestore: ' +
-                                              e.toString()));
+                                              e.toString()));*/
 
                                       //business logic endpoint
-                                      /*BusinessApi.signUp(user).then((res) {
+                                      BusinessApi.signUp(user).then((res) {
                                         print('Res for business data');
                                         FirebaseApi.addUser(user).then((res) {
                                           print('Res for firestore data');
@@ -742,7 +741,7 @@ class _ProfilePageUserDetailSaveState extends State<ProfilePageUserDetailSave> {
                                         });
                                       }).catchError((e) {
                                         print('error sign up: ' + e.toString());
-                                      });*/
+                                      });
                                     }
                                   }
                                   clear();

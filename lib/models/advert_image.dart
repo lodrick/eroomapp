@@ -29,16 +29,14 @@ class AdvertImage {
       );
 
   static AdvertImage fromJson(Map<String, dynamic> json) => AdvertImage(
-        imageId: json['imageId'],
-        advertId: json['advertId'],
-        imageUrl: json['imageUrl'],
-        createAt: json['createdAt'],
+        imageId: json['image_id'],
+        advertId: json['advert_id'],
+        imageUrl: json['image_url'],
       );
 
   Map<String, dynamic> toJson() => {
         'advert_id': imageId,
         'image_id': advertId,
         'image_url': imageUrl,
-        'createdAt': createAt,
       };
 }

@@ -1,7 +1,6 @@
 import 'package:eRoomApp/api/business_api.dart';
 import 'package:eRoomApp/api/firebase_api.dart';
 import 'package:eRoomApp/app_launcher_utils.dart';
-import 'package:eRoomApp/models/token.dart';
 import 'package:eRoomApp/pages_chat/chat_page.dart';
 import 'package:eRoomApp/shared/sharedPreferences.dart';
 import 'package:eRoomApp/theme.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:share/share.dart';
 
 class PostInfo extends StatefulWidget {
@@ -60,12 +58,12 @@ class _PostInfoState extends State<PostInfo> {
     'https://images.unsplash.com/photo-1586953983027-d7508a64f4bb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
   ];*/
 
-  void authForToken() async {
+  /*void authForToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      authToken = preferences.getString('auth_token');
+      //authToken = preferences.getString('auth_token');
     });
-  }
+  }*/
 
   void currentUser() async {
     SharedPrefs.getContactNumber().then((currentUserPhone) {
@@ -272,7 +270,7 @@ class _PostInfoState extends State<PostInfo> {
                                             tooltip:
                                                 'Click here to chat about the post.',
                                             onPressed: () {
-                                              Token token;
+                                              //Token token;
                                               BusinessApi.getUser(
                                                 userId: widget.userId,
                                                 authTohen: 'widget.authToken',

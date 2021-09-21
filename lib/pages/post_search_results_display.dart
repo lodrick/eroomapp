@@ -58,8 +58,8 @@ class PostSearchResultsDisplay extends StatelessWidget {
                     child: StreamBuilder<List<Advert>>(
                       //stream: FireBusinessApi.getSearchResultAdvert(minPrice, maxPrice, suburb, city),
                       stream: BusinessApi.finddverts(
-                          minValue: minPrice,
-                          maxValue: maxPrice,
+                          minValue: minPrice.toString(),
+                          maxValue: maxPrice.toString(),
                           suburb: suburb,
                           city: city,
                           authToken: authToken),

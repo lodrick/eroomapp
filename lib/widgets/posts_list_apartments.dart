@@ -81,7 +81,7 @@ class _PostsListApartmentsState extends State<PostsListApartments> {
         child: Padding(
           padding: EdgeInsets.only(left: 16.0, top: 8.0),
           child: StreamBuilder<List<Advert>>(
-            stream: BusinessApi.requestAdverts('widget.authToken'),
+            stream: BusinessApi.requestAdverts(widget.authToken),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:

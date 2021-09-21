@@ -1,5 +1,5 @@
 import 'package:eRoomApp/api/business_api.dart';
-import 'package:eRoomApp/api/fire_business_api.dart';
+//import 'package:eRoomApp/api/fire_business_api.dart';
 import 'package:eRoomApp/api/firebase_api.dart';
 import 'package:eRoomApp/pages/main_posts_page.dart';
 import 'package:eRoomApp/shared/sharedPreferences.dart';
@@ -49,7 +49,7 @@ class _SplashPageState extends State<SplashPage> {
                     email: result.email,
                     authToken: resultToken.authToken,
                     contactNumber: result.contactNumber,
-                    idUser: result.idUser,
+                    idUser: resultToken.id,
                     id: resultToken.id,
                   ),
                 ),
