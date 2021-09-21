@@ -586,7 +586,7 @@ class _ProfilePageUserDetailSaveState extends State<ProfilePageUserDetailSave> {
                         floatingActionButton: FloatingActionButton(
                           onPressed: _disableButton
                               ? () {
-                                  showAlert(context);
+                                  showProgressbar(context);
                                   if (firstNameController.text.isNotEmpty &&
                                       lastNameController.text.isNotEmpty &&
                                       emailController.text.isNotEmpty) {
@@ -764,7 +764,7 @@ class _ProfilePageUserDetailSaveState extends State<ProfilePageUserDetailSave> {
     );
   }
 
-  void showAlert(BuildContext context) {
+  void showProgressbar(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => Center(

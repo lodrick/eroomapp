@@ -136,7 +136,6 @@ class BusinessApi {
     for (Advert advert in advertsTp) {
       for (AdvertImage advertImage in advertImages) {
         if (advert.id == advertImage.advertId) {
-          print('advertImage.imageUrl: ' + advertImage.imageUrl);
           advertsTpUrl.add(advertImage);
         }
       }

@@ -91,6 +91,11 @@ class _PostCardsState extends State<PostCards> {
                     if (adverts == null || adverts.isEmpty) {
                       return buildText('No Advert Found');
                     } else {
+                      for (int i = 0; i < adverts.length; i++) {
+                        if (adverts[i].status == 'pending') {
+                          adverts.removeAt(i);
+                        }
+                      }
                       return PostCardWidget(
                         adverts: adverts,
                         contactNumber: widget.contactNumber,

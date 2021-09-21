@@ -57,7 +57,6 @@ class _PostCardWidgetState extends State<PostCardWidget> {
           for (int x = 0; x < advert.advertImages.length; x++) {
             if (advert.advertImages[x].imageUrl.isNotEmpty) {
               imageUrl = advert.advertImages[x].imageUrl;
-              print(imageUrl);
             } else {
               imageUrl = '';
             }
